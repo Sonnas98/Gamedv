@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Game Dev Tycoon</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    #game-container {
+      width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+    #stats {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Mini Game Dev Tycoon</h1>
+    <p>Develop your game company and release hit games!</p>
+    <button id="develop-btn">Develop Game</button>
+    <button id="hire-btn">Hire Developer ($1000)</button>
+    <div id="stats">
+      <p>Company Balance: $<span id="balance">5000</span></p>
+      <p>Number of Developers: <span id="developers">1</span></p>
+      <p>Games Released: <span id="games">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    let balance = 5000;
+    let developers = 1;
+    let games = 0;
+
+    const balanceEl = document.getElementById('balance');
+    const developersEl = document.getElementById('developers');
+    const gamesEl = document.getElementById('games');
+
+    // Function to update the stats on screen
+    function updateStats() {
+      balanceEl.innerText = balance;
+      developersEl.innerText = developers;
+      gamesEl.innerText = games;
+    }
+
+    // Handle game development
+    document.getElementById('develop-btn').addEventListener('click', function() {
+      if (balance < 500) {
+        alert('Not enough money to develop a game!');
+        return;
+      }
+      
+      // Deduct development cost
+      balance -= 500;
+      updateStats();
+
+      // Determine development time based on developers (more devs = faster development)
+      const developmentTime = Math.max(1000 - (developers * 100), 500);
+      alert('Game development started. It will take ' + developmentTime + ' milliseconds.');
+
+      setTimeout(function() {
+        // Random success factor to simulate game quality
+        const successFactor = Math.random();
+        const earnings = Math.floor(1000 * successFactor * developers);
+        games++;
+        balance += earnings;
+        alert('Game released! Success factor: ' + successFactor.toFixed(2) + '. Earnings: $' + earnings);
+        updateStats();
+      }, developmentTime);
+    });
+
+    // Handle hiring a new developer
+    document.getElementById('hire-btn').addEventListener('click', function() {
+      if (balance < 1000) {
+        alert('Not enough money to hire a developer!');
+        return;
+      }
+      balance -= 1000;
+      developers++;
+      updateStats();
+      alert('You hired a new developer!');
+    });
+
+    updateStats();
+  </script>
+</body>
+</html>
